@@ -3,15 +3,15 @@ from typing import Optional
 from enum import Enum
 
 class EstadoDeseo(str, Enum):
-    PENDIENTE = "pendiente"
-    COMPRADO = "comprado"
+    pendiente = "pendiente"
+    comprado = "comprado"
 
 class DeseoBase(BaseModel):
     nombre: str
     precio: Optional[float] = None
     link: Optional[str] = None
     descripcion: Optional[str] = None
-    estado: Optional[EstadoDeseo] = EstadoDeseo.PENDIENTE
+    estado: Optional[EstadoDeseo] = EstadoDeseo.pendiente
 
 class DeseoCreate(DeseoBase):
     id_usuario: int

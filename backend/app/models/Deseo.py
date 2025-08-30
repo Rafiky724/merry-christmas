@@ -5,8 +5,8 @@ from app.core.database import Base
 from sqlalchemy.orm import relationship
 
 class EstadoDeseo(str, enum.Enum):
-    PENDIENTE = "pendiente"
-    COMPRADO = "comprado"
+    pendiente = "pendiente"
+    comprado = "comprado"
 
 class Deseo(Base):
     __tablename__='deseos'
@@ -18,7 +18,7 @@ class Deseo(Base):
     descripcion = Column(Text)
     id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), nullable=False)
     id_familia = Column(Integer, ForeignKey("familias.id_familia"), nullable=False)
-    estado = Column(Enum(EstadoDeseo), default=EstadoDeseo.PENDIENTE)
+    estado = Column(Enum(EstadoDeseo), default=EstadoDeseo.pendiente)
     fecha_creacion = Column(TIMESTAMP, server_default=func.now())
     
     # Relaciones

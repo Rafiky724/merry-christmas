@@ -2,14 +2,14 @@ from pydantic import BaseModel
 from typing import Optional
 
 class FamiliaBase(BaseModel):
-    codigo: str
     nombre: str
 
 class FamiliaCreate(FamiliaBase):
-    creado_por: Optional[int] = None
+    pass
 
 class FamiliaOut(FamiliaBase):
     id_familia: int
+    codigo: str
     creado_por: Optional[int]
 
     class Config:
