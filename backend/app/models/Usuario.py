@@ -14,6 +14,5 @@ class Usuario(Base):
     fecha_registro = Column(TIMESTAMP, server_default=func.now())
     
     # Relaciones
-    familia = relationship("Familia", back_populates="usuarios", foreign_keys=[id_familia])
+    familia = relationship("Familia", back_populates="usuarios")
     deseos = relationship("Deseo", back_populates="usuario")
-    familias_creadas = relationship("Familia", back_populates="creador")

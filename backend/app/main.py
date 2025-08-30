@@ -7,4 +7,4 @@ app.include_router(api_router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Merry Christmas API"}
+    return {"mensaje": "Merry Christmas API"}
