@@ -14,8 +14,7 @@ class DeseoBase(BaseModel):
     estado: Optional[EstadoDeseo] = EstadoDeseo.pendiente
 
 class DeseoCreate(DeseoBase):
-    id_usuario: int
-    id_familia: int
+    pass
 
 class DeseoOut(DeseoBase):
     id_deseo: int
