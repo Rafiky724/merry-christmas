@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/bg_merry.png')] bg-cover bg-center relative">
       {/* Sombra encima del fondo */}
@@ -9,10 +9,20 @@ export default function Login() {
       {/* Card centrada */}
       <div className="w-80 sm:w-full z-10 bg-[#a8ced2] border-2 border-[#6aa3af] p-0 sm:p-8 rounded-lg shadow-lg max-w-md relative">
         <h1 className="text-2xl poppins-bold text-white mt-12 text-center">
-          Iniciar sesión
+          Registrarse
         </h1>
         {/* Aquí puedes colocar el formulario */}
         <form className="p-4">
+          <div className="mb-4">
+            <label className="block text-sm poppins-bold text-white mb-1">
+              Nombre
+            </label>
+            <input
+              type="text"
+              className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
+              placeholder="Ingresa tu nombre"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-sm poppins-bold text-white mb-1">
               Correo electrónico
@@ -23,7 +33,7 @@ export default function Login() {
               placeholder="Ingresa tu correo electrónico"
             />
           </div>
-          <div>
+          <div className="mb-6">
             <label className="block text-sm poppins-bold text-white mb-1">
               Contraseña
             </label>
@@ -33,24 +43,22 @@ export default function Login() {
               placeholder="Ingresa tu contraseña"
             />
           </div>
-          <div className="mb-6">
-            <small className="text-white poppins-regulas">
-              ¿No tienes cuenta?
-            </small>{" "}
-            <Link
-              to={"/register"}
-              className="poppins-bold text-[#e64563] text-xs hover:underline"
-            >
-              Registrarse
-            </Link>
-          </div>
-          <div className="w-30 mx-auto">
+          <div className="w-full flex justify-around">
             <Link to={"/home"}>
               <button
                 type="submit"
                 className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
               >
                 Ingresar
+              </button>
+            </Link>
+
+            <Link to={"/"}>
+              <button
+                type="submit"
+                className="w-full bg-[#f5f4f2] text-md poppins-bold text-[#257788] py-2 px-4 rounded-2xl hover:bg-[#d6dcdd] transition cursor-pointer"
+              >
+                Volver
               </button>
             </Link>
           </div>
