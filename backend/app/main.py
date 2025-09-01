@@ -18,7 +18,3 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
-
-@app.get("/")
-def read_root():
-    return {"mensaje": "Merry Christmas API"}
