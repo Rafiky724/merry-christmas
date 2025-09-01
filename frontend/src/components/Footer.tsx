@@ -1,15 +1,18 @@
 export default function Footer() {
   return (
-    <div className="bg-[#b8173e] p-4 flex flex-col gap-5 md:flex-row md:justify-between items-center">
-      {/* Nombre */}
-      <div>
-        <p className="text-white poppins-bold">
-          Familia Jhon Angel Fuentes{" "}
-          <span className="bg-[#a8ced2] p-1 ml-1 rounded-lg text-[#b8173e] poppins-regular">
-            Código 72154
-          </span>
-        </p>
-      </div>
-    </div>
+    <footer className="bg-[#b8173e] py-4 px-6 text-white text-center text-sm flex flex-col md:flex-row md:justify-between items-center">
+      {/* Autor */}
+      <p className="poppins-bold">
+        Hecho por{" "}
+        <a href="#" className="text-[#bc94f8] hover:underline transition">
+          Rafiky724
+        </a>
+      </p>
+
+      {/* Derechos de autor */}
+      <p className="poppins-regular mb-2 md:mb-0">
+        © {new Date().getFullYear()} Todos los derechos reservados.
+      </p>
+    </footer>
   );
 }
