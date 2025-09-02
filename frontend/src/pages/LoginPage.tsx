@@ -1,6 +1,25 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUsuario } from "../services/auth";
 import { Link } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const { access_token } = await loginUsuario(correo, contrasena);
+      localStorage.setItem("access_token", access_token);
+      navigate("/home");
+    } catch (error) {
+      alert("Correo o contraseña incorrecta");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/bg_merry.png')] bg-cover bg-center relative">
       {/* Sombra encima del fondo */}
@@ -12,13 +31,15 @@ export default function Login() {
           Iniciar sesión
         </h1>
         {/* Aquí puedes colocar el formulario */}
-        <form className="p-4">
+        <form className="p-4" onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-sm poppins-bold text-white mb-1">
               Correo electrónico
             </label>
             <input
               type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu correo electrónico"
             />
@@ -29,6 +50,8 @@ export default function Login() {
             </label>
             <input
               type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu contraseña"
             />
@@ -45,14 +68,12 @@ export default function Login() {
             </Link>
           </div>
           <div className="w-30 mx-auto">
-            <Link to={"/home"}>
-              <button
-                type="submit"
-                className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
-              >
-                Ingresar
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
+            >
+              Ingresar
+            </button>
           </div>
         </form>
 
