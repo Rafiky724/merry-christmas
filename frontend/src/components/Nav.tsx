@@ -1,9 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DeseoModal from "./DeseoModal";
+import { logoutUsuario } from "../services/auth";
 
 export default function Nav() {
   const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUsuario(); // 🔥 limpia localStorage
+    navigate("/"); // redirige al login
+  };
 
   return (
     <>
@@ -31,9 +38,9 @@ export default function Nav() {
 
         {/* Salir */}
         <div className="text-white poppins-bold text-lg mt-1 md:mt-0">
-          <Link to={"/"} className="hover:underline">
+          <button onClick={handleLogout} className="hover:underline cursor-pointer">
             Salir
-          </Link>
+          </button>
         </div>
       </div>
 
