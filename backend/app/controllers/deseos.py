@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
+
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.models.Deseo import Deseo, EstadoDeseo
 from app.models.Usuario import Usuario
 from app.schemas import DeseoCreate, DeseoOut
-from typing import List
+from app.schemas.usuario import UsuarioOut
 
 router = APIRouter()
 
@@ -31,19 +34,68 @@ async def crear_deseo(
     await db.refresh(nuevo_deseo)
     return nuevo_deseo
 
-# Ver deseos de la familia
-@router.get("/familia", response_model=List[DeseoOut])
-async def ver_deseos_familia(
+# # Ver deseos de la familia
+# @router.get("/familia", response_model=List[DeseoOut])
+# async def ver_deseos_familia(
+#     db: AsyncSession = Depends(get_db),
+#     current_user: Usuario = Depends(get_current_user)
+# ):
+#     if not current_user.id_familia:
+#         raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
+    
+#     result = await db.execute(
+#         select(Deseo).where(Deseo.id_familia == current_user.id_familia)
+#     )
+#     return result.scalars().all()
+
+# # Ver deseos del usuario logueado
+# @router.get("/usuario", response_model=List[DeseoOut])
+# async def ver_deseos_usuario(
+#     db: AsyncSession = Depends(get_db),
+#     current_user: Usuario = Depends(get_current_user)
+# ):
+#     result = await db.execute(
+#         select(Deseo, Usuario)
+#         .join(Usuario, Usuario.id_usuario == Deseo.id_usuario)
+#         .where(Deseo.id_usuario == current_user.id_usuario)
+#     )
+#     rows = result.all()
+
+#     deseos_out = []
+#     for deseo, usuario in rows:
+#         # Convertimos a dict y agregamos el campo 'usuario'
+#         deseo_data = deseo.__dict__.copy()
+#         deseo_data["usuario"] = UsuarioOut.model_validate(usuario)
+        
+#         # Creamos la instancia del schema con todos los campos
+#         deseos_out.append(DeseoOut(**deseo_data))
+
+#     return deseos_out
+
+@router.get("/familia/deseos", response_model=List[DeseoOut])
+async def ver_deseos_familia_con_usuarios(
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user)
 ):
     if not current_user.id_familia:
         raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
-    
+
+    # Hacemos join con Usuario para incluir los datos del creador del deseo
     result = await db.execute(
-        select(Deseo).where(Deseo.id_familia == current_user.id_familia)
+        select(Deseo, Usuario)
+        .join(Usuario, Usuario.id_usuario == Deseo.id_usuario)
+        .where(Deseo.id_familia == current_user.id_familia)
     )
-    return result.scalars().all()
+    
+    rows = result.all()
+
+    deseos_out = []
+    for deseo, usuario in rows:
+        deseo_data = deseo.__dict__.copy()
+        deseo_data["usuario"] = UsuarioOut.model_validate(usuario)
+        deseos_out.append(DeseoOut(**deseo_data))
+
+    return deseos_out
 
 # Cambiar estado de un deseo (pendiente → comprado)
 @router.patch("/{id_deseo}/estado", response_model=DeseoOut)
@@ -52,7 +104,7 @@ async def cambiar_estado(
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user)
 ):
-    result = await db.execute(select(Deseo).where(Deseo.id_deseo == id_deseo))
+    result = await db.execute(select(Deseo).options(selectinload(Deseo.usuario)).where(Deseo.id_deseo == id_deseo))
     deseo = result.scalars().first()
 
     if not deseo:
