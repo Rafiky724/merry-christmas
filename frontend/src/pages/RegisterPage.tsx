@@ -1,6 +1,26 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerUsuario } from "../services/auth";
 import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
+
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await registerUsuario({ nombre, correo, contrasena });
+      alert("Cuenta creada correctamente");
+      navigate("/");
+    } catch (error) {
+      alert("Error al registrar usuario");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/bg_merry.png')] bg-cover bg-center relative">
       {/* Sombra encima del fondo */}
@@ -19,6 +39,8 @@ export default function RegisterPage() {
             </label>
             <input
               type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu nombre"
             />
@@ -29,6 +51,8 @@ export default function RegisterPage() {
             </label>
             <input
               type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu correo electrónico"
             />
@@ -39,19 +63,19 @@ export default function RegisterPage() {
             </label>
             <input
               type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu contraseña"
             />
           </div>
           <div className="w-full flex justify-around">
-            <Link to={"/home"}>
-              <button
-                type="submit"
-                className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
-              >
-                Ingresar
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
+            >
+              Ingresar
+            </button>
 
             <Link to={"/"}>
               <button
