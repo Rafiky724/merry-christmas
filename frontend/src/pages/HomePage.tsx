@@ -1,6 +1,33 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { crearFamilia, unirseFamilia } from "../services/familiaService";
 
 export default function Home() {
+  const [nombreFamilia, setNombreFamilia] = useState("");
+  const [codigoFamilia, setCodigoFamilia] = useState("");
+
+  const handleCrearFamilia = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const data = await crearFamilia(nombreFamilia);
+      alert(`Familia creada: ${data.nombre} (código: ${data.codigo})`);
+      window.location.href = "/familia";
+    } catch (error: any) {
+      alert(error.response?.data?.detail || "Error al crear familia");
+    }
+  };
+
+  const handleUnirseFamilia = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const data = await unirseFamilia(codigoFamilia);
+      alert(data.msg);
+      window.location.href = "/familia";
+    } catch (error: any) {
+      alert(error.response?.data?.detail || "Error al unirse a familia");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[url('/bg_merry.png')] bg-cover bg-center relative">
       {/* Sombra encima del fondo */}
@@ -12,23 +39,23 @@ export default function Home() {
           Crear familia
         </h2>
         {/* Aquí puedes colocar el formulario */}
-        <form className="p-4">
+        <form className="p-4" onSubmit={handleCrearFamilia}>
           <div className="mb-4">
             <input
               type="text"
+              value={nombreFamilia}
+              onChange={(e) => setNombreFamilia(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa el nombre para la familia"
             />
           </div>
           <div className="w-30 mx-auto">
-            <Link to={"/familia"}>
-              <button
-                type="submit"
-                className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
-              >
-                Crear
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
+            >
+              Crear
+            </button>
           </div>
         </form>
 
@@ -36,23 +63,23 @@ export default function Home() {
           Unirse a una familia
         </h2>
         {/* Aquí puedes colocar el formulario */}
-        <form className="px-4 py-2">
+        <form className="px-4 py-2" onSubmit={handleUnirseFamilia}>
           <div className="mb-4">
             <input
-              type="email"
+              type="text"
+              value={codigoFamilia}
+              onChange={(e) => setCodigoFamilia(e.target.value)}
               className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa el código de la familia"
             />
           </div>
           <div className="w-30 mx-auto mb-4">
-            <Link to={"/familia"}>
-              <button
-                type="submit"
-                className="w-full bg-[#69ad6b] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#448546] transition cursor-pointer"
-              >
-                Unirse
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="w-full bg-[#69ad6b] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#448546] transition cursor-pointer"
+            >
+              Unirse
+            </button>
           </div>
         </form>
 
