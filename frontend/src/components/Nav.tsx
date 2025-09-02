@@ -1,11 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeseoModal from "./DeseoModal";
 import { logoutUsuario } from "../services/auth";
+import { miFamilia } from "../services/familiaService";
 
 export default function Nav() {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
+  const [familiaNombre, setFamiliaNombre] = useState<string | null>(null);
+  const [familiaCodigo, setFamiliaCodigo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFamilia = async () => {
+      try {
+        const { familia } = await miFamilia();
+        if (familia) {
+          setFamiliaNombre(familia.nombre);
+          setFamiliaCodigo(familia.codigo);
+        }
+      } catch (err) {
+        console.error("Error cargando familia:", err);
+      }
+    };
+
+    fetchFamilia();
+  }, []);
 
   const handleLogout = () => {
     logoutUsuario(); // 🔥 limpia localStorage
@@ -18,9 +37,9 @@ export default function Nav() {
         {/* Nombre */}
         <div className="text-center md:text-left">
           <p className="text-white poppins-bold text-lg md:text-base">
-            Familia Jhon Angel Fuentes{" "}
+            Familia {familiaNombre}{" "}
             <span className="bg-[#a8ced2] p-1 ml-1 rounded-lg text-[#b8173e] poppins-regular text-sm">
-              Código 72154
+              Código {familiaCodigo}
             </span>
           </p>
         </div>
@@ -38,7 +57,10 @@ export default function Nav() {
 
         {/* Salir */}
         <div className="text-white poppins-bold text-lg mt-1 md:mt-0">
-          <button onClick={handleLogout} className="hover:underline cursor-pointer">
+          <button
+            onClick={handleLogout}
+            className="hover:underline cursor-pointer"
+          >
             Salir
           </button>
         </div>

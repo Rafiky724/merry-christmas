@@ -15,7 +15,7 @@ export default function DeseoModal({ onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-2xl poppins-bold text-white mt-12 text-center">
-          Crear familia
+          Agregar Deseo
         </h2>
 
         <form className="p-4">
