@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../services/auth";
 import { Link } from "react-router-dom";
+import { miFamilia } from "../services/familiaService";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,7 +15,14 @@ export default function Login() {
     try {
       const { access_token } = await loginUsuario(correo, contrasena);
       localStorage.setItem("access_token", access_token);
-      navigate("/home");
+
+      const { tieneFamilia } = await miFamilia();
+
+      if (tieneFamilia) {
+        navigate("/familia");
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       alert("Correo o contraseña incorrecta");
     }

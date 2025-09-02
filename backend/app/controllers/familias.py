@@ -80,3 +80,28 @@ async def salir_familia(
     await db.refresh(current_user)
 
     return {"msg": "Has salido de la familia exitosamente."}
+
+# Verificar familia del usuario
+@router.get("/mi-familia", response_model=dict)
+async def obtener_mi_familia(
+    db: AsyncSession = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+    if current_user.id_familia is None:
+        return {"tieneFamilia": False, "familia": None}
+
+    result = await db.execute(select(Familia).where(Familia.id_familia == current_user.id_familia))
+    familia = result.scalars().first()
+
+    if not familia:
+        return {"tieneFamilia": False, "familia": None}
+
+    return {
+        "tieneFamilia": True,
+        "familia": {
+            "id": familia.id_familia,
+            "nombre": familia.nombre,
+            "codigo": familia.codigo,
+            "creado_por": familia.creado_por,
+        },
+    }
