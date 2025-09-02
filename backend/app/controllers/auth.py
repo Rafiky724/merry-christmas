@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from app.core.database import get_db
+from app.core.deps import get_current_user
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.Usuario import Usuario
 from app.schemas.usuario import UsuarioCreate, UsuarioOut
@@ -47,3 +48,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     
     access_token = create_access_token(data={"sub": str(user.id_usuario)})
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/me", response_model=UsuarioOut)
+async def get_me(current_user: Usuario = Depends(get_current_user)):
+    return current_user
