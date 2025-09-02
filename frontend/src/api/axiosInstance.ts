@@ -3,12 +3,14 @@ import.meta.env.VITE_API_URL
 
 // Configura la URL base de tu API
 const API_URL = import.meta.env.VITE_API_URL; // Ajusta la URL según tu servidor backend
+const token = localStorage.getItem("access_token");
 
 // Crea una instancia de Axios
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
+    ...(token && { Authorization: `Bearer ${token}` })
   },
 });
 
