@@ -22,6 +22,6 @@ export async function cambiarEstadoDeseo(id_deseo: number): Promise<Deseo> {
 
 // Eliminar deseo
 export async function eliminarDeseo(id_deseo: number): Promise<{ msg: string }> {
-  const res = await axiosInstance.delete<{ msg: string }>(`/api/deseos/${id_deseo}`);
+  const res = await axiosInstance.delete<{ msg: string }>(`/deseos/${id_deseo}`);
   return res.data;
 }
