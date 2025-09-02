@@ -1,5 +1,5 @@
 import random, string
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.core.database import get_db
@@ -16,7 +16,7 @@ def generar_codigo():
 # Crear familia
 @router.post("/", response_model=FamiliaOut)
 async def crear_familia(
-    familia: FamiliaCreate, 
+    nombre: str = Form(...),  # Usamos Form(...) para recibir como parámetros de formulario
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user)
 ):
@@ -24,12 +24,17 @@ async def crear_familia(
     if current_user.id_familia is not None:
         raise HTTPException(status_code=400, detail="Ya perteneces a una familia, no puedes crear otra.")
 
+    # Generar el código para la nueva familia
     codigo = generar_codigo()
+
+    # Crear la nueva familia con los datos recibidos
     nueva_familia = Familia(
         codigo=codigo,
-        nombre=familia.nombre,
+        nombre=nombre,  # Aquí pasamos el nombre directamente desde el formulario
         creado_por=current_user.id_usuario
     )
+    
+    # Guardar en la base de datos
     db.add(nueva_familia)
     await db.commit()
     await db.refresh(nueva_familia)

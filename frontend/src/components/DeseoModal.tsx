@@ -1,10 +1,46 @@
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { crearDeseo } from "../services/deseoService"; // Importa el servicio
+import type { DeseoCreate } from "../types"; // Asegúrate de que el tipo `DeseoCreate` está bien importado
+ // Asegúrate de que el tipo `DeseoCreate` está bien importado
 
 type Props = {
   onClose: () => void;
 };
 
 export default function DeseoModal({ onClose }: Props) {
+  // Estado para los inputs
+  const [nombre, setNombre] = useState("");
+  const [precio, setPrecio] = useState<number>(0);
+  const [descripcion, setDescripcion] = useState("");
+  const [link, setLink] = useState("");
+  
+  // Estado para manejo de errores y carga
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null); // Limpiar errores previos
+
+    const nuevoDeseo: DeseoCreate = {
+      nombre,
+      precio,
+      descripcion,
+      link,
+      estado: "pendiente", // Este es el estado por defecto que puedes cambiar
+    };
+
+    try {
+      await crearDeseo(nuevoDeseo); // Llamamos al servicio para crear el deseo
+      onClose(); // Cierra el modal después de crear el deseo
+    } catch (err) {
+      setError("Hubo un error al crear el deseo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
@@ -18,37 +54,49 @@ export default function DeseoModal({ onClose }: Props) {
           Agregar Deseo
         </h2>
 
-        <form className="p-4">
+        <form className="p-4" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm poppins-bold text-white mb-1">
               Nombre
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
+              className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
             />
           </div>
+
           <div className="mb-4">
             <label className="block text-sm poppins-bold text-white mb-1">
               Precio
             </label>
             <input
               type="number"
-              className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
+              className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa el precio"
+              value={precio || ""}
+              onChange={(e) => setPrecio(parseFloat(e.target.value))}
+              required
             />
           </div>
+
           <div className="mb-4">
             <label className="block text-sm poppins-bold text-white mb-1">
               Descripción
             </label>
             <input
               type="text"
-              className="w-full px-4 py-2 bg-[#6aa3af] text-white  poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
+              className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa tu descripción"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              required
             />
           </div>
+
           <div className="mb-6">
             <label className="block text-sm poppins-bold text-white mb-1">
               Link
@@ -57,17 +105,22 @@ export default function DeseoModal({ onClose }: Props) {
               type="text"
               className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
               placeholder="Ingresa el link"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
             />
           </div>
+
+          {/* Error */}
+          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+
           <div className="w-full flex justify-around">
-            <Link to={"/home"}>
-              <button
-                type="submit"
-                className="w-full bg-[#69ad6b] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#448546] transition cursor-pointer"
-              >
-                Crear
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="w-full bg-[#69ad6b] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#448546] transition cursor-pointer"
+              disabled={loading}
+            >
+              {loading ? "Creando..." : "Crear Deseo"}
+            </button>
           </div>
         </form>
 

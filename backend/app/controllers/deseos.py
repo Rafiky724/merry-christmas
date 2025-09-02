@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from sqlalchemy.future import select
@@ -16,22 +16,31 @@ router = APIRouter()
 # Crear deseo
 @router.post("/", response_model=DeseoOut)
 async def crear_deseo(
-    deseo: DeseoCreate, 
+    nombre: str = Form(...),  # Se usa Form(...) para recibir como parámetros de formulario
+    precio: float = Form(...),
+    descripcion: str = Form(...),
+    link: str = Form(...),
     db: AsyncSession = Depends(get_db), 
     current_user: Usuario = Depends(get_current_user)
-    ):
-    
+):
     if not current_user.id_familia:
         raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
     
+    # Creamos el objeto deseo desde los parámetros del formulario
     nuevo_deseo = Deseo(
-        **deseo.model_dump(),
+        nombre=nombre,
+        precio=precio,
+        descripcion=descripcion,
+        link=link,
+        estado="pendiente",  # Si es necesario establecer un valor predeterminado
         id_usuario=current_user.id_usuario,
         id_familia=current_user.id_familia
     )
+    
     db.add(nuevo_deseo)
     await db.commit()
     await db.refresh(nuevo_deseo)
+    
     return nuevo_deseo
 
 # # Ver deseos de la familia

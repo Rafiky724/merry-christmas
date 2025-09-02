@@ -42,13 +42,9 @@ export type Deseo = {
 }
 
 export type DeseoCreate = {
-    id_deseo: number;
     nombre: string;
     precio: number; // Puede ser null/undefined si no se define
     link: string;
     descripcion: string;
-    id_usuario: number;
-    id_familia: number;
     estado: EstadoDeseo;
-    fecha_creacion: string; // viene como ISO string desde el backend
 }

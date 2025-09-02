@@ -10,6 +10,15 @@ const axiosInstance = axios.create({
   },
 });
 
+// // Determinar el tipo de Content-Type basado en la solicitud
+//     if (config.url?.includes("/")) {
+//       // Para login, usamos application/x-www-form-urlencoded
+//       config.headers["Content-Type"] = "application/x-www-form-urlencoded";
+//     } else if (config.url?.includes("/familia")) {
+//       // Para crear deseos, usamos application/json
+//       config.headers["Content-Type"] = "application/json";
+//     }
+
 // ✅ Interceptor de solicitud para agregar el token dinámicamente
 axiosInstance.interceptors.request.use(
   (config) => {
