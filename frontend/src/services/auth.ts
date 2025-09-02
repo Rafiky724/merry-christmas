@@ -1,5 +1,6 @@
 import axiosInstance from "../api/axiosInstance";
 import qs from "qs";
+import type { Usuario } from "../types";
 
 export const registerUsuario = async (data: {
     nombre: string;
@@ -24,4 +25,9 @@ export const loginUsuario = async (correo: string, contrasena: string) => {
 export const logoutUsuario = () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("user");
+};
+
+export const getUsuarioActual = async (): Promise<Usuario> => {
+  const res = await axiosInstance.get<Usuario>("/api/auth/me");
+  return res.data;
 };
