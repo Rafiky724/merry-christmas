@@ -3,12 +3,16 @@ import axios from "axios";
 // Configura la URL base de tu API
 const API_URL = import.meta.env.VITE_API_URL;
 
+console.log("📦 VITE_API_URL desde .env =", API_URL);
+
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
   },
 });
+
+console.log("🧪 axiosInstance baseURL =", axiosInstance.defaults.baseURL);
 
 // ✅ Interceptor de solicitud para agregar el token dinámicamente
 axiosInstance.interceptors.request.use(
