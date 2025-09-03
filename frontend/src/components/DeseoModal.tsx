@@ -62,7 +62,7 @@ export default function DeseoModal({ onClose }: Props) {
             <input
               type="text"
               className="w-full px-4 py-2 bg-[#6aa3af] text-white poppins-regular placeholder:text-white rounded-md focus:outline-none focus:ring focus:border-[#257788] text-sm"
-              placeholder="Ingresa tu nombre"
+              placeholder="Ingresa el nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               required
