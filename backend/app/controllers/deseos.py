@@ -48,25 +48,26 @@ async def ver_deseos_familia_con_usuarios(
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user)
 ):
-    if not current_user.id_familia:
-        raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
+    try:
+        if not current_user.id_familia:
+            raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
 
-    # Hacemos join con Usuario para incluir los datos del creador del deseo
-    result = await db.execute(
-        select(Deseo, Usuario)
-        .join(Usuario, Usuario.id_usuario == Deseo.id_usuario)
-        .where(Deseo.id_familia == current_user.id_familia)
-    )
-    
-    rows = result.all()
+        result = await db.execute(
+            select(Deseo, Usuario)
+            .join(Usuario, Usuario.id_usuario == Deseo.id_usuario)
+            .where(Deseo.id_familia == current_user.id_familia)
+        )
+        rows = result.all()
+        deseos_out = []
+        for deseo, usuario in rows:
+            deseo_data = deseo.__dict__.copy()
+            deseo_data["usuario"] = UsuarioOut.model_validate(usuario)
+            deseos_out.append(DeseoOut(**deseo_data))
+        return deseos_out
 
-    deseos_out = []
-    for deseo, usuario in rows:
-        deseo_data = deseo.__dict__.copy()
-        deseo_data["usuario"] = UsuarioOut.model_validate(usuario)
-        deseos_out.append(DeseoOut(**deseo_data))
-
-    return deseos_out
+    except Exception as e:
+        print("🔥 Error en ver_deseos_familia_con_usuarios:", e)
+        raise HTTPException(status_code=500, detail="Error interno del servidor")
 
 # Cambiar estado de un deseo (pendiente → comprado)
 @router.patch("/{id_deseo}/estado", response_model=DeseoOut)
