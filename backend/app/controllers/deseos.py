@@ -39,9 +39,13 @@ async def crear_deseo(
         
         db.add(nuevo_deseo)
         await db.commit()
-        await db.refresh(nuevo_deseo)
-        
-        return nuevo_deseo
+        result = await db.execute(
+            select(Deseo)
+            .options(selectinload(Deseo.usuario))
+            .where(Deseo.id_deseo == nuevo_deseo.id_deseo)
+        )
+        deseo_con_usuario = result.scalars().first()
+        return deseo_con_usuario
     except Exception as e:
         print("ERROR crear_deseo:", e)
         raise
