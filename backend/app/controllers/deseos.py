@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Form, HTTPException
+from sqlalchemy import outerjoin
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from sqlalchemy.future import select
@@ -54,12 +55,16 @@ async def ver_deseos_familia_con_usuarios(
 
         result = await db.execute(
             select(Deseo, Usuario)
-            .join(Usuario, Usuario.id_usuario == Deseo.id_usuario)
+            .select_from(outerjoin(Deseo, Usuario, Deseo.id_usuario == Usuario.id_usuario))
             .where(Deseo.id_familia == current_user.id_familia)
         )
         rows = result.all()
         deseos_out = []
         for deseo, usuario in rows:
+            if usuario is None:
+                # Salta este deseo, o lo manejas como anónimo
+                continue
+
             deseo_data = deseo.__dict__.copy()
             deseo_data["usuario"] = UsuarioOut.model_validate(usuario)
             deseos_out.append(DeseoOut(**deseo_data))
