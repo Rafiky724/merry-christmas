@@ -23,63 +23,28 @@ async def crear_deseo(
     db: AsyncSession = Depends(get_db), 
     current_user: Usuario = Depends(get_current_user)
 ):
-    if not current_user.id_familia:
-        raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
-    
-    # Creamos el objeto deseo desde los parámetros del formulario
-    nuevo_deseo = Deseo(
-        nombre=nombre,
-        precio=precio,
-        descripcion=descripcion,
-        link=link,
-        estado="pendiente",  # Si es necesario establecer un valor predeterminado
-        id_usuario=current_user.id_usuario,
-        id_familia=current_user.id_familia
-    )
-    
-    db.add(nuevo_deseo)
-    await db.commit()
-    await db.refresh(nuevo_deseo)
-    
-    return nuevo_deseo
-
-# # Ver deseos de la familia
-# @router.get("/familia", response_model=List[DeseoOut])
-# async def ver_deseos_familia(
-#     db: AsyncSession = Depends(get_db),
-#     current_user: Usuario = Depends(get_current_user)
-# ):
-#     if not current_user.id_familia:
-#         raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
-    
-#     result = await db.execute(
-#         select(Deseo).where(Deseo.id_familia == current_user.id_familia)
-#     )
-#     return result.scalars().all()
-
-# # Ver deseos del usuario logueado
-# @router.get("/usuario", response_model=List[DeseoOut])
-# async def ver_deseos_usuario(
-#     db: AsyncSession = Depends(get_db),
-#     current_user: Usuario = Depends(get_current_user)
-# ):
-#     result = await db.execute(
-#         select(Deseo, Usuario)
-#         .join(Usuario, Usuario.id_usuario == Deseo.id_usuario)
-#         .where(Deseo.id_usuario == current_user.id_usuario)
-#     )
-#     rows = result.all()
-
-#     deseos_out = []
-#     for deseo, usuario in rows:
-#         # Convertimos a dict y agregamos el campo 'usuario'
-#         deseo_data = deseo.__dict__.copy()
-#         deseo_data["usuario"] = UsuarioOut.model_validate(usuario)
+    try:
+        if not current_user.id_familia:
+            raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
         
-#         # Creamos la instancia del schema con todos los campos
-#         deseos_out.append(DeseoOut(**deseo_data))
-
-#     return deseos_out
+        nuevo_deseo = Deseo(
+            nombre=nombre,
+            precio=precio,
+            descripcion=descripcion,
+            link=link,
+            estado="pendiente",  # <-- revisar
+            id_usuario=current_user.id_usuario,
+            id_familia=current_user.id_familia
+        )
+        
+        db.add(nuevo_deseo)
+        await db.commit()
+        await db.refresh(nuevo_deseo)
+        
+        return nuevo_deseo
+    except Exception as e:
+        print("ERROR crear_deseo:", e)
+        raise
 
 @router.get("/familia/deseos", response_model=List[DeseoOut])
 async def ver_deseos_familia_con_usuarios(
