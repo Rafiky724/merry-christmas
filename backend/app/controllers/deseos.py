@@ -23,32 +23,25 @@ async def crear_deseo(
     db: AsyncSession = Depends(get_db), 
     current_user: Usuario = Depends(get_current_user)
 ):
-    try:
-        if not current_user.id_familia:
-            raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
-        
-        nuevo_deseo = Deseo(
-            nombre=nombre,
-            precio=precio,
-            descripcion=descripcion,
-            link=link,
-            estado=EstadoDeseo.pendiente,  # <-- revisar
-            id_usuario=current_user.id_usuario,
-            id_familia=current_user.id_familia
-        )
-        
-        db.add(nuevo_deseo)
-        await db.commit()
-        result = await db.execute(
-            select(Deseo)
-            .options(selectinload(Deseo.usuario))
-            .where(Deseo.id_deseo == nuevo_deseo.id_deseo)
-        )
-        deseo_con_usuario = result.scalars().first()
-        return deseo_con_usuario
-    except Exception as e:
-        print("ERROR crear_deseo:", e)
-        raise
+    if not current_user.id_familia:
+        raise HTTPException(status_code=404, detail="Usuario no pertenece a ninguna familia")
+    
+    # Creamos el objeto deseo desde los parámetros del formulario
+    nuevo_deseo = Deseo(
+        nombre=nombre,
+        precio=precio,
+        descripcion=descripcion,
+        link=link,
+        estado="pendiente",  # Si es necesario establecer un valor predeterminado
+        id_usuario=current_user.id_usuario,
+        id_familia=current_user.id_familia
+    )
+    
+    db.add(nuevo_deseo)
+    await db.commit()
+    await db.refresh(nuevo_deseo)
+    
+    return nuevo_deseo
 
 @router.get("/familia/deseos", response_model=List[DeseoOut])
 async def ver_deseos_familia_con_usuarios(
