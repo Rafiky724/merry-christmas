@@ -32,7 +32,7 @@ async def crear_deseo(
             precio=precio,
             descripcion=descripcion,
             link=link,
-            estado="pendiente",  # <-- revisar
+            estado=EstadoDeseo.pendiente,  # <-- revisar
             id_usuario=current_user.id_usuario,
             id_familia=current_user.id_familia
         )
