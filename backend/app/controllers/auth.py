@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,17 +18,23 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Registro de usuario
 # -----------------------------
 @router.post("/register", response_model=UsuarioOut)
-async def register(user: UsuarioCreate, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Usuario).where(Usuario.correo == user.correo))
+async def register(
+    nombre: str = Form(...),
+    correo: str = Form(...),
+    contrasena: str = Form(...),
+    db: AsyncSession = Depends(get_db)
+):
+    # Validar usuario existente
+    result = await db.execute(select(Usuario).where(Usuario.correo == correo))
     existing_user = result.scalars().first()
     if existing_user:
         raise HTTPException(status_code=400, detail="El correo ya está registrado")
     
+    # Crear usuario
     new_user = Usuario(
-        nombre=user.nombre,
-        correo=user.correo,
-        contrasena=hash_password(user.contrasena),
-        id_familia=user.id_familia
+        nombre=nombre,
+        correo=correo,
+        contrasena=hash_password(contrasena),
     )
     
     db.add(new_user)
