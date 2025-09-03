@@ -32,7 +32,7 @@ export default function RegisterPage() {
           Registrarse
         </h1>
         {/* Aquí puedes colocar el formulario */}
-        <form className="p-4">
+        <form className="p-4" onSubmit={handleRegister}>
           <div className="mb-4">
             <label className="block text-sm poppins-bold text-white mb-1">
               Nombre
