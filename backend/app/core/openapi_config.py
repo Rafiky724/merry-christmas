@@ -8,9 +8,9 @@ def custom_openapi(app: FastAPI):
         return app.openapi_schema
 
     openapi_schema = get_openapi(
-        title="Scout Master API",
+        title="Merry Christmas API",
         version="1.0.0",
-        description="Documentación de la API para el proyecto Scout Master",
+        description="Documentación de la API para el proyecto Merry Christmas",
         routes=app.routes,
     )
 
