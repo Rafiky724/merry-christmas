@@ -51,7 +51,7 @@ export default function DeseoCard({
     <div className="relative sm:w-md bg-white rounded-4xl p-4 border border-gray-200 transition duration-300 flex flex-col justify-between shadow-[6px_6px_0px_0px_#d1d5db]">
       <div className="bg-[#a8ced2] rounded-t-2xl mb-2 p-4">
         {/* Fecha centrada */}
-        <div className="text-center text-xs text-white poppins-regular mb-2">
+        <div className="text-center text-xs text-black poppins-regular mb-2">
           {deseo.fecha_creacion}
         </div>
 
@@ -97,7 +97,7 @@ export default function DeseoCard({
         </div>
       </div>
 
-      <div className="bg-[#a8ced2] rounded-b-lg p-2 text-center text-white poppins-bold mb-4">
+      <div className="bg-[#a8ced2] rounded-b-lg p-2 text-center text-black poppins-bold mb-4">
         <p>{deseo.usuario?.nombre}</p>
       </div>
 
