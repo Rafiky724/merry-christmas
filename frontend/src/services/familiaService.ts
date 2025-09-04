@@ -3,8 +3,11 @@ import axiosInstance from "../api/axiosInstance";
 
 // Crear familia
 export const crearFamilia = async (nombre: string) => {
-  console.log("API_URL en crearFamilia:", import.meta.env.VITE_API_URL);
-  const res = await axiosInstance.post<Familia>("/api/familias", { nombre });
+  
+  const formData = new URLSearchParams();
+  formData.append("nombre", nombre);
+
+  const res = await axiosInstance.post<Familia>("/api/familias/", formData);
   return res.data;
 };
 

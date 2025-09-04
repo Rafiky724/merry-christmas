@@ -72,7 +72,7 @@ export default function RegisterPage() {
           <div className="w-full flex justify-around">
             <button
               type="submit"
-              className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
+              className="w-30 bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
             >
               Ingresar
             </button>
