@@ -10,6 +10,7 @@ app.openapi = lambda: custom_openapi(app)
 
 origins = [
     "http://localhost:5173",  # URL de tu frontend local
+    "https://merryschristmas.netlify.app"
 ]
 
 
