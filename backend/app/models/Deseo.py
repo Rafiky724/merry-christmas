@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import TIMESTAMP, Column, Enum, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, Date, Enum, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.sql import func
 from app.core.database import Base
 from sqlalchemy.orm import relationship
@@ -19,7 +19,7 @@ class Deseo(Base):
     id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), nullable=False)
     id_familia = Column(Integer, ForeignKey("familias.id_familia"), nullable=False)
     estado = Column(Enum(EstadoDeseo), default=EstadoDeseo.pendiente)
-    fecha_creacion = Column(TIMESTAMP, server_default=func.now())
+    fecha_creacion = Column(Date, server_default=func.now())
     
     # Relaciones
     usuario = relationship("Usuario", back_populates="deseos")

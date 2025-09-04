@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Date, Column, ForeignKey, Integer, String, Text
 from sqlalchemy.sql import func
 from app.core.database import Base
 from sqlalchemy.orm import relationship
@@ -11,7 +11,7 @@ class Usuario(Base):
     correo = Column(String(100), nullable=False, unique=True)
     contrasena = Column(Text, nullable=False)
     id_familia = Column(Integer, ForeignKey("familias.id_familia"))
-    fecha_registro = Column(TIMESTAMP, server_default=func.now())
+    fecha_registro = Column(Date, server_default=func.now())
     
     # Relaciones
     familia = relationship("Familia", back_populates="usuarios")

@@ -8,10 +8,15 @@ app = FastAPI()
 
 app.openapi = lambda: custom_openapi(app)
 
+origins = [
+    "http://localhost:5173",  # URL de tu frontend local
+]
+
+
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://merry-christmas724.netlify.app"],  # URL de tu frontend (Vite por defecto)
+    allow_origins=origins,  # URL de tu frontend (Vite por defecto)
     allow_credentials=True,
     allow_methods=["*"],  # Permitir todos los métodos (GET, POST, PUT, DELETE, OPTIONS)
     allow_headers=["*"],  # Permitir todos los headers
