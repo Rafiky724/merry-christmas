@@ -38,6 +38,15 @@ export default function DeseoCard({
     }
   };
 
+  const formatearPrecioCOP = (precio: number): string => {
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(precio);
+};
+
   return (
     <div className="relative sm:w-md bg-white rounded-4xl p-4 border border-gray-200 transition duration-300 flex flex-col justify-between shadow-[6px_6px_0px_0px_#d1d5db]">
       <div className="bg-[#a8ced2] rounded-t-2xl mb-2 p-4">
@@ -52,7 +61,7 @@ export default function DeseoCard({
             {deseo.nombre}
           </h3>
           <span className="text-sm text-[#e64563] poppins-bold">
-            ${deseo.precio?.toFixed(2) ?? "0.00"}
+            {formatearPrecioCOP(deseo.precio ?? 0)}
           </span>
         </div>
 
