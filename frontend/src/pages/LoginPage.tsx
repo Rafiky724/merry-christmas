@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../services/auth";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { miFamilia } from "../services/familiaService";
 
 export default function Login() {
@@ -64,7 +64,7 @@ export default function Login() {
               placeholder="Ingresa tu contraseña"
             />
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <small className="text-white poppins-regulas">
               ¿No tienes cuenta?
             </small>{" "}
@@ -74,7 +74,7 @@ export default function Login() {
             >
               Registrarse
             </Link>
-          </div>
+          </div> */}
           <div className="w-30 mx-auto">
             <button
               type="submit"
