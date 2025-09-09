@@ -75,7 +75,7 @@ export default function Login() {
               Registrarse
             </Link>
           </div> */}
-          <div className="w-30 mx-auto">
+          <div className="w-30 mx-auto mt-6">
             <button
               type="submit"
               className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
