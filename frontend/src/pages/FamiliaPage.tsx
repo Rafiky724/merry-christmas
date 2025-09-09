@@ -28,13 +28,13 @@ export default function FamiliaPage() {
     fetchDatos();
   }, []);
 
-  useEffect(() => {
-    const fetchDeseos = async () => {
-      const deseosData = await getDeseosFamiliaConUsuarios();
-      setDeseosFamilia(deseosData);
-    };
-    fetchDeseos();
-  }, []);
+  // useEffect(() => {
+  //   const fetchDeseos = async () => {
+  //     const deseosData = await getDeseosFamiliaConUsuarios();
+  //     setDeseosFamilia(deseosData);
+  //   };
+  //   fetchDeseos();
+  // }, []);
 
   const eliminarDeseoDeLista = (id_deseo: number) => {
     setDeseosFamilia((prevDeseos) =>

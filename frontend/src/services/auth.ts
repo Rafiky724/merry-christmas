@@ -2,15 +2,10 @@ import axiosInstance from "../api/axiosInstance";
 import qs from "qs";
 import type { Usuario } from "../types";
 
-export const registerUsuario = async (data: {
-    nombre: string;
-    correo: string;
-    contrasena: string;
-    id_familia?: number;
-}) => {
-    const res = await axiosInstance.post("/api/auth/register", data);
-    return res.data;
-};
+// export const registerUsuario = async (data: UsuarioCreate) => {
+//     const res = await axiosInstance.post("/api/auth/register", data);
+//     return res.data;
+// };
 
 export const loginUsuario = async (correo: string, contrasena: string) => {
     const data = qs.stringify({

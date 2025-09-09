@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { crearFamilia, unirseFamilia } from "../services/familiaService";
 
@@ -6,7 +6,7 @@ export default function Home() {
   const [nombreFamilia, setNombreFamilia] = useState("");
   const [codigoFamilia, setCodigoFamilia] = useState("");
 
-  const handleCrearFamilia = async (e: React.FormEvent) => {
+  const handleCrearFamilia = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const data = await crearFamilia(nombreFamilia);
@@ -17,7 +17,7 @@ export default function Home() {
     }
   };
 
-  const handleUnirseFamilia = async (e: React.FormEvent) => {
+  const handleUnirseFamilia = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const data = await unirseFamilia(codigoFamilia);
