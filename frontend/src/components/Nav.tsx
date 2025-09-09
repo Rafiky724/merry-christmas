@@ -3,12 +3,17 @@ import { useNavigate } from "react-router-dom";
 import DeseoModal from "./DeseoModal";
 import { logoutUsuario } from "../services/auth";
 import { miFamilia } from "../services/familiaService";
+import type { Deseo } from "../types";
 
-export default function Nav() {
+type Props = {
+  onNuevoDeseo: (nuevoDeseo: Deseo) => void; // Recibimos la función para agregar el nuevo deseo
+};
+
+export default function Nav({ onNuevoDeseo }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const [familiaNombre, setFamiliaNombre] = useState<string | null>(null);
-  const [familiaCodigo, setFamiliaCodigo] = useState<string | null>(null);
+  const [familiaNombre, setFamiliaNombre] = useState('');
+  const [familiaCodigo, setFamiliaCodigo] = useState('');
 
   useEffect(() => {
     const fetchFamilia = async () => {
@@ -67,7 +72,7 @@ export default function Nav() {
       </div>
 
       {/* ModalDeseo se muestra solo si openModal es true */}
-      {openModal && <DeseoModal onClose={() => setOpenModal(false)} />}
+      {openModal && <DeseoModal onClose={() => setOpenModal(false)} onNuevoDeseo={onNuevoDeseo}/>}
     </>
   );
 }

@@ -28,6 +28,11 @@ export default function FamiliaPage() {
     fetchDatos();
   }, []);
 
+  // Función para agregar un deseo
+  const agregarDeseo = (nuevoDeseo: Deseo) => {
+    setDeseosFamilia((prevDeseos) => [...prevDeseos, nuevoDeseo]);
+  };
+
   // useEffect(() => {
   //   const fetchDeseos = async () => {
   //     const deseosData = await getDeseosFamiliaConUsuarios();
@@ -35,7 +40,8 @@ export default function FamiliaPage() {
   //   };
   //   fetchDeseos();
   // }, []);
-
+  
+  // Función para eliminar un deseo
   const eliminarDeseoDeLista = (id_deseo: number) => {
     setDeseosFamilia((prevDeseos) =>
       prevDeseos.filter((deseo) => deseo.id_deseo !== id_deseo)
@@ -45,7 +51,7 @@ export default function FamiliaPage() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Nav />
+        <Nav onNuevoDeseo={agregarDeseo}/>
 
         <main className="flex-grow p-5 bg-[url('/patron_navidad.png')] bg-[length:250px_250px] bg-repeat">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">

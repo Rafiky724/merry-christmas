@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { crearDeseo } from "../services/deseoService"; // Importa el servicio
-import type { DeseoCreate } from "../types"; // Asegúrate de que el tipo `DeseoCreate` está bien importado
+import type { Deseo, DeseoCreate } from "../types"; // Asegúrate de que el tipo `DeseoCreate` está bien importado
  // Asegúrate de que el tipo `DeseoCreate` está bien importado
 
 type Props = {
   onClose: () => void;
+  onNuevoDeseo: (nuevoDeseo: Deseo) => void;
 };
 
-export default function DeseoModal({ onClose }: Props) {
+export default function DeseoModal({ onClose, onNuevoDeseo }: Props) {
   // Estado para los inputs
   const [nombre, setNombre] = useState("");
-  const [precio, setPrecio] = useState<number>(0);
+  const [precio, setPrecio] = useState(0);
   const [descripcion, setDescripcion] = useState("");
   const [link, setLink] = useState("");
   
@@ -18,7 +19,7 @@ export default function DeseoModal({ onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null); // Limpiar errores previos
@@ -32,7 +33,8 @@ export default function DeseoModal({ onClose }: Props) {
     };
 
     try {
-      await crearDeseo(nuevoDeseo); // Llamamos al servicio para crear el deseo
+      const deseoCreado = await crearDeseo(nuevoDeseo);
+      onNuevoDeseo(deseoCreado);
       onClose(); // Cierra el modal después de crear el deseo
     } catch (err) {
       setError("Hubo un error al crear el deseo");
