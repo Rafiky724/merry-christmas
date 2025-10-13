@@ -2,9 +2,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#b8173e] py-4 px-6 text-white text-center text-sm flex flex-col md:flex-row md:justify-between items-center">
       {/* Autor */}
-      <p className="poppins-bold">
+      <p className="poppins-regular">
         Hecho por{" "}
-        <a href="#" className="text-[#836aa9] hover:underline transition">
+        <a href="#" className="poppins-bold text-white hover:underline transition">
           Jhon Angel Fuentes
         </a>
       </p>
