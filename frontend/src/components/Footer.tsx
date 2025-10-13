@@ -4,7 +4,7 @@ export default function Footer() {
       {/* Autor */}
       <p className="poppins-bold">
         Hecho por{" "}
-        <a href="#" className="text-[#bc94f8] hover:underline transition">
+        <a href="#" className="text-[#836aa9] hover:underline transition">
           Jhon Angel Fuentes
         </a>
       </p>
