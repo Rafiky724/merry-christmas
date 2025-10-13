@@ -9,6 +9,7 @@ import { getUsuarioActual } from "../services/auth";
 export default function FamiliaPage() {
   const [deseosFamilia, setDeseosFamilia] = useState<Deseo[]>([]);
   const [usuarioActual, setUsuarioActual] = useState<Usuario>();
+  const [usuarioFiltrado, setUsuarioFiltrado] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -33,14 +34,6 @@ export default function FamiliaPage() {
     setDeseosFamilia((prevDeseos) => [...prevDeseos, nuevoDeseo]);
   };
 
-  // useEffect(() => {
-  //   const fetchDeseos = async () => {
-  //     const deseosData = await getDeseosFamiliaConUsuarios();
-  //     setDeseosFamilia(deseosData);
-  //   };
-  //   fetchDeseos();
-  // }, []);
-  
   // Función para eliminar un deseo
   const eliminarDeseoDeLista = (id_deseo: number) => {
     setDeseosFamilia((prevDeseos) =>
@@ -48,14 +41,46 @@ export default function FamiliaPage() {
     );
   };
 
+  const deseosFiltrados = usuarioFiltrado
+    ? deseosFamilia.filter(
+        (deseo) => deseo.usuario?.id_usuario === usuarioFiltrado
+      )
+    : deseosFamilia;
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Nav onNuevoDeseo={agregarDeseo}/>
+        <Nav onNuevoDeseo={agregarDeseo} />
 
         <main className="flex-grow p-5 bg-[url('/patron_navidad.png')] bg-[length:250px_250px] bg-repeat">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">
-            {deseosFamilia.map((deseo) => {
+          <div className="mb-4 poppins-regular">
+            <select
+              id="filtroUsuario"
+              className="p-2 bg-[#a8ced2] rounded-lg"
+              onChange={(event) =>
+                setUsuarioFiltrado(
+                  event.target.value ? parseInt(event.target.value) : null
+                )
+              }
+            >
+              <option value="" className="poppins-regular">Ver Todos</option>
+              {deseosFamilia
+                .map((deseo) => deseo.usuario)
+                .filter(
+                  (usuario, index, self) =>
+                    index ===
+                    self.findIndex((u) => u?.id_usuario === usuario?.id_usuario)
+                )
+                .map((usuario) => (
+                  <option key={usuario?.id_usuario} value={usuario?.id_usuario}>
+                    {usuario?.nombre}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 justify-items-center">
+            {deseosFiltrados.map((deseo) => {
               const esMio =
                 (usuarioActual &&
                   deseo.usuario &&
