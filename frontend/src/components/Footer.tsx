@@ -5,7 +5,7 @@ export default function Footer() {
       <p className="poppins-bold">
         Hecho por{" "}
         <a href="#" className="text-[#bc94f8] hover:underline transition">
-          Rafiky724
+          Jhon Angel Fuentes
         </a>
       </p>
 
