@@ -1,7 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../services/auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { Link } from "react-router-dom";
+
 import { miFamilia } from "../services/familiaService";
 
 export default function Login() {
@@ -24,7 +27,17 @@ export default function Login() {
         navigate("/home");
       }
     } catch (error) {
-      alert("Correo o contraseña incorrecta");
+      console.log("Error en login:", error);
+      toast.error("Correo o contraseña incorrecta", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -38,6 +51,7 @@ export default function Login() {
         <h1 className="text-2xl poppins-bold text-white mt-12 text-center">
           Iniciar sesión
         </h1>
+
         {/* Aquí puedes colocar el formulario */}
         <form className="p-4" onSubmit={handleLogin}>
           <div className="mb-4">

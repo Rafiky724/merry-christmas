@@ -1,30 +1,86 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { crearFamilia, unirseFamilia } from "../services/familiaService";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const [nombreFamilia, setNombreFamilia] = useState("");
   const [codigoFamilia, setCodigoFamilia] = useState("");
+  const [isLoadingCrear, setIsLoadingCrear] = useState(false);
+  const [isLoadingUnirse, setIsLoadingUnirse] = useState(false);
 
   const handleCrearFamilia = async (e: FormEvent) => {
     e.preventDefault();
+    if (isLoadingCrear) return;
+
+    setIsLoadingCrear(true);
     try {
       const data = await crearFamilia(nombreFamilia);
-      alert(`Familia creada: ${data.nombre} (código: ${data.codigo})`);
-      window.location.href = "/familia";
+      toast.success(
+        `Familia "${data.nombre}" creada exitosamente! Código: ${data.codigo}`,
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        }
+      );
+      setTimeout(() => {
+        window.location.href = "/familia";
+      }, 2000);
     } catch (error: any) {
-      alert(error.response?.data?.detail || "Error al crear familia");
+      toast.error(error.response?.data?.detail || "Error al crear familia", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } finally {
+      setIsLoadingCrear(false);
     }
   };
 
   const handleUnirseFamilia = async (e: FormEvent) => {
     e.preventDefault();
+    if (isLoadingUnirse) return;
+
+    setIsLoadingUnirse(true);
     try {
       const data = await unirseFamilia(codigoFamilia);
-      alert(data.msg);
-      window.location.href = "/familia";
+      toast.success(data.msg || "Te has unido a la familia exitosamente!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        window.location.href = "/familia";
+      }, 2000);
     } catch (error: any) {
-      alert(error.response?.data?.detail || "Error al unirse a familia");
+      toast.error(error.response?.data?.detail || "Error al unirse a familia", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } finally {
+      setIsLoadingUnirse(false);
     }
   };
 
@@ -52,9 +108,12 @@ export default function Home() {
           <div className="w-30 mx-auto">
             <button
               type="submit"
-              className="w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer"
+              disabled={isLoadingCrear}
+              className={`w-full bg-[#b8173e] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#940e30] transition cursor-pointer ${
+                isLoadingCrear ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              Crear
+              {isLoadingCrear ? "Creando..." : "Crear"}
             </button>
           </div>
         </form>
@@ -76,9 +135,12 @@ export default function Home() {
           <div className="w-30 mx-auto mb-4">
             <button
               type="submit"
-              className="w-full bg-[#69ad6b] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#448546] transition cursor-pointer"
+              disabled={isLoadingUnirse}
+              className={`w-full bg-[#69ad6b] text-md poppins-bold text-white py-2 px-4 rounded-2xl hover:bg-[#448546] transition cursor-pointer ${
+                isLoadingUnirse ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              Unirse
+              {isLoadingUnirse ? "Uniéndose..." : "Unirse"}
             </button>
           </div>
         </form>
