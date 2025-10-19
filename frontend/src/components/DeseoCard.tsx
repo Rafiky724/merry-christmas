@@ -86,15 +86,15 @@ export default function DeseoCard({
 
         {/* Botones card */}
         <div className="flex justify-between items-center poppins-bold">
-          <Link
-            to={deseo.link || "#"}
+          <a
+            href={deseo.link || "#"}
             target="_blank"
             rel="noopener noreferrer"
           >
             <button className="bg-[#836aa9] text-white text-sm py-1 px-3 rounded-md hover:bg-[#583e80] transition cursor-pointer">
               Link
             </button>
-          </Link>
+          </a>
 
           {/* Mostrar botón Comprar solo si NO es mío y no está comprado */}
           {!esMio && !esComprado && (
