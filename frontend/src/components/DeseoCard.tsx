@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import type { Deseo } from "../types";
 import { useState } from "react";
 import { cambiarEstadoDeseo, eliminarDeseo } from "../services/deseoService";
